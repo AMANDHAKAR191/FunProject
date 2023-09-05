@@ -7,9 +7,14 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,40 +53,47 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             FunProjectTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                Scaffold(
+                    topBar = { LargeTopAppBar(title = { Text(text = "Dynamic Clock") })}
                 ) {
-                    var currentTimeInMs by remember {
-                        mutableStateOf(System.currentTimeMillis())
-                    }
-
-                    LaunchedEffect(key1 = true) {
-                        while (true) {
-                            delay(200)
-                            currentTimeInMs = System.currentTimeMillis()
-                        }
-                    }
-                    Box(
+                    Surface(
                         modifier = Modifier
-                            .background(white)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                            .fillMaxSize()
+                            .padding(it),
+                        color = MaterialTheme.colorScheme.background
                     ) {
-                        Clock(
+                        var currentTimeInMs by remember {
+                            mutableStateOf(System.currentTimeMillis())
+                        }
+
+                        LaunchedEffect(key1 = true) {
+                            while (true) {
+                                delay(200)
+                                currentTimeInMs = System.currentTimeMillis()
+                            }
+                        }
+                        Box(
                             modifier = Modifier
-                                .size(500.dp),
-                            time = {
-                                currentTimeInMs
-                            },
-                            circleRadius = 250f,
-                            outerCircleThickness = 10f
-                        )
+                                .background(white)
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Clock(
+                                modifier = Modifier
+                                    .size(500.dp),
+                                time = {
+                                    currentTimeInMs
+                                },
+                                circleRadius = 250f,
+                                outerCircleThickness = 10f
+                            )
+                        }
                     }
                 }
             }
